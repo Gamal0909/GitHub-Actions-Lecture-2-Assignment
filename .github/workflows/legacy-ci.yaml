@@ -1,8 +1,6 @@
 name: Legacy-CI-Pipeline
 
-on:
-  push:
-    branches: [main]
+on: [push,pull_request]
 
 jobs:
   build:
@@ -37,3 +35,18 @@ jobs:
         with:
           name: react-app
           path: dist
+  Deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: react-app
+          path: dist
+      - name: Deploy to Railway
+        run: |
+          echo "deploying to server"
+          echo "deploying to server"
+          echo "deploying to server"
+          
