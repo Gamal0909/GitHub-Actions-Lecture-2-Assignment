@@ -69,4 +69,4 @@ jobs:
             docker pull ghcr.io/${{ env.REPO_OWNER }}/react-app-cicd:latest
             docker stop react-app-cicd || true
             docker rm react-app-cicd || true
-            docker run -d --name react-app-cicd -p 8080:80 ghcr.io/${{ env.REPO_OWNER }}/react-app-cicd:latest
+            docker run -d --name react-app-cicd -p 80:80 ghcr.io/${{ env.REPO_OWNER }}/react-app-cicd:latest
