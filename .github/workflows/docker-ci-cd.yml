@@ -36,12 +36,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Lowercase Repository Owner
+        run: |
+          echo "REPO_OWNER=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.actor }}'
+
       - uses: docker/build-push-action@v6.18.0
         with:
           push: true
           tags: |
-            ghcr.io/${{ github.actor }}/react-app-cicd:${{ github.sha }}
-            ghcr.io/${{ github.actor }}/react-app-cicd:latest
+            ghcr.io/${{ env.REPO_OWNER }}/react-app-cicd:${{ github.sha }}
+            ghcr.io/${{ env.REPO_OWNER }}/react-app-cicd:latest
           context: .
 
       
