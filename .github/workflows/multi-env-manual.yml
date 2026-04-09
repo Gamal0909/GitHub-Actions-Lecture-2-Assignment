@@ -90,7 +90,7 @@ jobs:
         name: SSH and deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ vars.STAGING_IP }}
+          host: ${{ vars.STAGGIND_IP }}
           username: ${{ vars.USERNAME }}
           key: ${{ secrets.BUILDPUBKEY }}
           port: 22
