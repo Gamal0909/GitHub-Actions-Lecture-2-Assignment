@@ -53,6 +53,20 @@ jobs:
             ghcr.io/${{ env.REPO_OWNER }}/react-app-cicd:latest
           context: .
 
-      
-      
-      
+  Deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.BUILD_IP }}
+          username: ${{ vars.USERNAME }}
+          key: ${{ secrets.BUILDPUBKEY }}
+          port: 22
+          script: |
+            docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+            docker pull ghcr.io/${{ env.REPO_OWNER }}/react-app-cicd:latest
+            docker stop react-app-cicd || true
+            docker rm react-app-cicd || true
+            docker run -d --name react-app-cicd -p 8080:80 ghcr.io/${{ env.REPO_OWNER }}/react-app-cicd:latest
