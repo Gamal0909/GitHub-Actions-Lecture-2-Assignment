@@ -5,32 +5,30 @@ on:
     branches: [main]
 
 jobs:
-  name: BuildandDeploy
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: install dependencies
-      uses: actions/setup-node@v6
-      with:
-        node-version: '20'
-        
-    - name: run lint 
-      run: npm run lint
-    
-
-    - name: run tests
-      run: npm test
-    
-    - name: build project
-      run: npm run build
-
-    - name: upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: react-app
-        path: dist
-
-    
+  build:
+    name: Build-and-Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: install dependencies
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          
+      - name: run lint 
+        run: npm run lint
+      
   
+      - name: run tests
+        run: npm test
+      
+      - name: build project
+        run: npm run build
+  
+      - name: upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-app
+          path: dist
