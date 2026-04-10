@@ -1,0 +1,58 @@
+name: GitHub-Actions-Expressions-Practice
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        default: 'dev'
+        required: false
+
+jobs:
+  print-info:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Branch Check (Main)
+      - name: Branch Check main
+        if: startsWith(github.ref_name, 'main')
+        run: echo "Main branch"
+
+      # 1. Branch Check (Other)
+      - name: Branch Check other
+        if: "!startsWith(github.ref_name, 'main')"
+        run: echo "Other branch"
+
+      # 2. Commit Message Check
+      # ملاحظة: github.event.head_commit متاح في حدث push فقط
+      - name: Commit Message Check
+        if: contains(github.event.head_commit.message, 'fix')
+        run: echo "Commit message is ${{ github.event.head_commit.message }}"
+
+      # 3. Show Event Data (JSON)
+      - name: show Event Data
+        run: echo '${{ toJson(github.event) }}'
+
+      # 4. Environment Value (مع القيمة الافتراضية)
+      - name: Environment Value
+        run: |
+          SELECTED_ENV="${{ github.event.inputs.environment || 'dev' }}"
+          echo "The selected environment is: $SELECTED_ENV"
+
+      # 5. Conditional Steps (الحالات الخاصة)
+      - name: Success Step
+        if: success()
+        run: echo "All previous steps succeeded!"
+
+      - name: Failure Step
+        if: failure()
+        run: echo "Any previous step failed!"
+
+      - name: Always Run Step
+        if: always()
+        run: echo "This always runs."
+
+      - name: Cancelled Step
+        if: cancelled()
+        run: echo "Workflow was cancelled."
